@@ -1,13 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
 </head>
-<body>
 
+<body>
+    <div id="battle_arena">
+        <div id="fight_animation">
+            <div>
+                <img id="right_pokemon" src="./sprites/blastoise.gif" alt="">
+                <img id="left_pokemon" src="./sprites/venusaur.gif" alt="">
+            </div>
+
+            <img id="land" src="./sprites/grass.png" alt="">
+            <div id="top_left_health">
+                <div id="pokemon_info" class="banner">
+
+                </div>
+                <div id="right_corner">
+                    <div id="topcor" class="banner"></div>
+                    <div id="bottomcor"></div>
+
+                </div>
+
+
+            </div>
+            <div id="bottom_right_health" class="bottom_right banner"></div>
+            <div id="bottom_right_border" class="bottom_right">
+
+
+            </div>
+
+        </div>
+        <div id="contol_center">
+            <div id="outer_box">
+                <div id="info"></div>
+            </div>
+            <div id="action_selector">
+                <div id="leftButtons">
+                    <button id="fight">
+                        <div>
+
+                        </div>
+                        <p>FIGHT</p>
+                    </button>
+                    <button id="pokemon">
+                        <div></div>
+                      <p>POKEMON</p>
+                    </button>
+                </div>
+                <div id="rightButtons">
+                    <button id="bag">
+                        <div></div>
+                        <p>BAG</p>
+                    </button>
+                    <button id="run">
+                        <div></div>
+                        <p>RUN</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="./script.js"></script>
 </body>
+
 </html>

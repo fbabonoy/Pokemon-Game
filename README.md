@@ -32,20 +32,6 @@ This project is a two-player Pokemon game where players face off using their Pok
 - **JavaScript:** For game logic, animations, and DOM manipulation.
 - **Canvas (optional):** To enhance animations and create dynamic effects.
 
----
-
-## Setup and Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repository-link
-   ```
-2. Navigate to the project folder:
-   ```bash
-   cd pokemon-game
-   ```
-3. Open `index.html` in your browser to play the game.
-
----
 
 ## Game Mechanics
 1. **Gameplay:**
