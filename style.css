@@ -216,13 +216,25 @@ body {
 }
 
 #bottom_right_health {
+    display: flex;
+    justify-content: end;
     z-index: 1;
+    padding-right: 10px;
+}
+
+#right-pokemon_info {
+    width: 85%;
+    height: 100%;
+    /* background-color: black; */
+    position: relative;
+    /* right: 0; */
+
 }
 
 #bottom_right_border {
     border-top: 6px solid black;
     border-bottom: 6px solid black;
-    right: 5px;
+    right: 15px;
     z-index: 0;
 }
 
@@ -280,7 +292,7 @@ body {
 }
 
 #healthBar {
-    margin-top: 10px;
+    margin-top: 7px;
     background-color: black;
     position: absolute;
     right: 0;
@@ -299,7 +311,18 @@ body {
 
 #healthBar div {
     width: 100%;
-    height: 80%;
+    height: 70%;
     background-color: green;
     margin: 5px;
+}
+
+#health_value {
+    /* font-size: x-large; */
+    position: absolute;
+    bottom: -10%;
+    right: 0;
+    background-color: rgb(201, 200, 200);
+    padding-inline: 4%;
+    padding-block: 0.1%;
+    border-radius: 10px;
 }
