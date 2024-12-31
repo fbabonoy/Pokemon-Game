@@ -6,6 +6,7 @@ body {
 
 }
 
+
 #battle_arena {
     background-color: gray;
     width: 934;
@@ -78,6 +79,7 @@ body {
     align-items: center;
     background-color: white;
     padding: 2px;
+    opacity: 85%;
     /* background-color: rgb(234, 234, 234);; */
 }
 
@@ -128,7 +130,7 @@ body {
 }
 
 #fight div {
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(211, 0, 0);
     border: 4px solid rgb(78, 0, 0);
 }
 
@@ -150,7 +152,7 @@ body {
 
 
 #top_left_health {
-    height: 18%;
+    height: 15%;
     width: 40%;
     display: flex;
     position: absolute;
@@ -168,6 +170,7 @@ body {
     height: 100%;
     width: 80%;
     background-color: red;
+    position: relative;
 }
 
 #right_corner {
@@ -242,4 +245,61 @@ body {
     right: 12%;
     top: 12%;
 
+}
+
+#bannerText {
+    /* background-color: red; */
+    width : 100%;
+    height : 30%;
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-top: 10px;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 100;
+    font-size: 30px;
+
+    color: rgb(41, 41, 41);
+
+    text-shadow: 
+    2px 2px 0px rgb(177, 176, 176)  /* Bottom-right */
+}
+
+#bannerText p:first-child {
+    width: 60%;
+    text-align: start;
+}
+
+#bannerText p:last-child {
+    width: 30%;
+    position: absolute;
+    right: 0;
+    text-align: end;
+}
+
+#healthBar {
+    margin-top: 10px;
+    background-color: black;
+    position: absolute;
+    right: 0;
+    width: 70%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    color: rgb(255, 213, 2);
+    
+    font-weight: bold;
+    font-family: "Tiny5", serif;
+    font-style: normal;
+}
+
+#healthBar div {
+    width: 100%;
+    height: 80%;
+    background-color: green;
+    margin: 5px;
 }
