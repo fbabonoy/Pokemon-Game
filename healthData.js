@@ -2,8 +2,29 @@ let leftBanner = document.querySelector("#pokemon_info")
 leftBanner.appendChild(generateHealthBanner())
 
 let rightBanner = document.querySelector("#right-pokemon_info")
-
 rightBanner.appendChild(generateHealthBanner(true))
+
+
+let fontSizeHB = document.querySelectorAll("#bannerText")
+
+// window.addEventListener("load" , (e) => {  
+//     resizeButtons(fontSizeHB,`${window.innerWidth * 0.015}px`)
+
+// })
+
+
+// window.addEventListener("resize" , (e) => {    
+//     resizeButtons(fontSizeHB,`${window.innerWidth * 0.015}px`)
+
+// })
+
+// function resizeButtons(font, size = "large") {
+//     console.log(font);
+    
+//     font.forEach((e) => {
+//         e.style.fontSize = size
+//     })
+// }
 
 
 function generateHealthBanner(bottomRightUser = false) {
@@ -46,6 +67,8 @@ function generateHealthBanner(bottomRightUser = false) {
     if (bottomRightUser) {
         healthInfo.appendChild(healthValue())
 
+    } else {
+        healthBar.style.height = "25%"
     }
     
     bannerFragment.appendChild(divBanner)
