@@ -1,3 +1,5 @@
+import { pokemonList } from "./pokemonList"
+
 let fightArea = document.getElementById("battle_arena")
 let body = document.querySelector("body")
 let fightAnimation = document.querySelector("#fight_animation")
@@ -16,7 +18,7 @@ let fontSizeHB = document.querySelectorAll("#bannerText")
 
 
 
-window.addEventListener("load" , (e) => {  
+window.addEventListener("DOMContentLoaded" , (e) => {  
     resizeGameBoard()
 
 })
@@ -73,11 +75,11 @@ function generateHealthBanner(bottomRightUser = false) {
     divBanner.setAttribute(`id`, "bannerText")
 
     let nameText = document.createElement("p")
-    nameText.textContent = "Blastoise ⚨"
+    nameText.textContent = `Blastoise ${Math.random() > 0.5 ? "⚨" : "♀"}`
     nameText.style.fontSize = `${window.s}px`
 
     let levelText = document.createElement("p")
-    levelText.textContent = "Lv17"
+    levelText.textContent = "Lv60"
 
     divBanner.appendChild(nameText)
     divBanner.appendChild(levelText)
