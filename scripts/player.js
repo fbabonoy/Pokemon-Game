@@ -7,7 +7,7 @@ let player = {
     }
 }
 
-let pokekmon = {
+let pokemon = {
     name: "",
     gender: Math.round(Math.random()* 2) > 1 ? "⚨" : "♀",
     attacks: {},
