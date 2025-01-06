@@ -62,9 +62,14 @@ body {
     margin-left: 10px;
     /* background-color: blue; */
     display: flex;
+    position: relative;
 }
 
-#action_selector div {
+#action_selector #leftButtons {
+    height: 100%;
+    width: 50%;
+}
+#action_selector #rightButtons {
     height: 100%;
     width: 50%;
 }
@@ -301,7 +306,7 @@ body {
     width: 70%;
     height: 20%;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     border: 2px solid black;
     color: rgb(255, 213, 2);
@@ -333,4 +338,38 @@ body {
     font-weight: bold;
     font-family: "Tiny5", serif;
     font-style: normal;
+}
+
+#action_banner {
+    height: 90%;
+    width: 98%;
+    top: 0;
+    background-color: rgb(225, 225, 225);
+    position: absolute;
+    border-radius: 10px;
+    border: 2px solid black;
+    z-index: -1;
+    padding: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#action_banner #backButton {
+    width: 95%;
+    height: 20%;
+    background-color: cadetblue;
+    /* margin: 10px; */
+}
+
+#action_banner #buttonOptions {
+    width: 95%;
+    height: 75%;
+    /* background-color: aqua; */
+    margin-bottom: 7px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /* text-align: ; */
 }

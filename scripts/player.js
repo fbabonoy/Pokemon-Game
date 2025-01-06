@@ -1,6 +1,6 @@
 let player = {
     name: "",
-    pokekmon: [],
+    pokemon: [],
     bag: ["posion", "revive"],
     yield: function () {
 
