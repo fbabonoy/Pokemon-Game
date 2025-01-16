@@ -1,137 +1,5 @@
-const pokemonList = [
-    {
-        name: "Pikachu",
-        stats: {
-            hp: 100,
-            hpLeft: 100,
-            attack: 55,
-            defense: 40,
-            speed: 90
-        },
-        attacks: {
-            "Thunder Shock": { damage: 40, maxUses: 10, currentUses: 10 },
-            "Quick Attack": { damage: 20, maxUses: 15, currentUses: 15 },
-            "Iron Tail": { damage: 50, maxUses: 10, currentUses: 10 },
-            "Electro Ball": { damage: 60, maxUses: 5, currentUses: 5 }
-        }
-    },
-    {
-        name: "Charizard",
-        stats: {
-            hp: 150,
-            hpLeft: 150,
-            attack: 84,
-            defense: 78,
-            speed: 100
-        },
-        attacks: {
-            "Flamethrower": { damage: 90, maxUses: 10, currentUses: 10 },
-            "Dragon Claw": { damage: 80, maxUses: 10, currentUses: 10 },
-            "Air Slash": { damage: 75, maxUses: 15, currentUses: 15 },
-            "Slash": { damage: 70, maxUses: 20, currentUses: 20 }
-        }
-    },
-    {
-        name: "Blastoise",
-        stats: {
-            hp: 160,
-            hpLeft: 160,
-            attack: 83,
-            defense: 100,
-            speed: 78
-        },
-        attacks: {
-            "Hydro Pump": { damage: 110, maxUses: 5, currentUses: 5 },
-            "Water Gun": { damage: 40, maxUses: 25, currentUses: 25 },
-            "Bite": { damage: 60, maxUses: 20, currentUses: 20 },
-            "Skull Bash": { damage: 100, maxUses: 5, currentUses: 5 }
-        }
-    },
-    {
-        name: "Venusaur",
-        stats: {
-            hp: 160,
-            hpLeft: 160,
-            attack: 82,
-            defense: 83,
-            speed: 80
-        },
-        attacks: {
-            "Solar Beam": { damage: 120, maxUses: 5, currentUses: 5 },
-            "Razor Leaf": { damage: 55, maxUses: 20, currentUses: 20 },
-            "Vine Whip": { damage: 45, maxUses: 25, currentUses: 25 },
-            "Earthquake": { damage: 100, maxUses: 10, currentUses: 10 }
-        }
-    },
-    {
-        name: "Gengar",
-        stats: {
-            hp: 120,
-            hpLeft: 120,
-            attack: 65,
-            defense: 60,
-            speed: 110
-        },
-        attacks: {
-            "Shadow Ball": { damage: 80, maxUses: 15, currentUses: 15 },
-            "Hypnosis": { damage: 0, maxUses: 10, currentUses: 10 },
-            "Dream Eater": { damage: 100, maxUses: 10, currentUses: 10 },
-            "Dark Pulse": { damage: 80, maxUses: 15, currentUses: 15 }
-        }
-    },
-    {
-        name: "Machamp",
-        stats: {
-            hp: 140,
-            hpLeft: 140,
-            attack: 130,
-            defense: 80,
-            speed: 65
-        },
-        attacks: {
-            "Dynamic Punch": { damage: 100, maxUses: 5, currentUses: 5 },
-            "Karate Chop": { damage: 50, maxUses: 20, currentUses: 20 },
-            "Cross Chop": { damage: 75, maxUses: 15, currentUses: 15 },
-            "Submission": { damage: 80, maxUses: 10, currentUses: 10 }
-        }
-    },
-    {
-        name: "Snorlax",
-        stats: {
-            hp: 200,
-            hpLeft: 200,
-            attack: 110,
-            defense: 65,
-            speed: 30
-        },
-        attacks: {
-            "Body Slam": { damage: 85, maxUses: 15, currentUses: 15 },
-            "Hyper Beam": { damage: 150, maxUses: 5, currentUses: 5 },
-            "Rest": { damage: 0, maxUses: 10, currentUses: 10 },
-            "Headbutt": { damage: 70, maxUses: 20, currentUses: 20 }
-        }
-    },
-    {
-        name: "Dragonite",
-        stats: {
-            hp: 170,
-            hpLeft: 170,
-            attack: 134,
-            defense: 95,
-            speed: 80
-        },
-        attacks: {
-            "Dragon Breath": { damage: 60, maxUses: 20, currentUses: 20 },
-            "Thunderbolt": { damage: 90, maxUses: 10, currentUses: 10 },
-            "Hurricane": { damage: 110, maxUses: 5, currentUses: 5 },
-            "Fire Punch": { damage: 75, maxUses: 15, currentUses: 15 }
-        }
-    }
-];
-
-
-
-
+import { Player } from "./player.js";
+import { Pokemon } from "./PokemonGenerator.js";
 let fightArea = document.getElementById("battle_arena")
 let body = document.querySelector("body")
 let fightAnimation = document.querySelector("#fight_animation")
@@ -149,36 +17,37 @@ let rightPokemonSprite = document.querySelector("#right_pokemon")
 let leftPokemonSprite = document.querySelector("#left_pokemon")
 
 let topPlayerTurn = false
+let topPokemonIndex = 0
+let bottomPokemonIndex = 0
 
-const topPlayer = {
-    name: "brok",
-    pokemon: getPokemon(),
-    bag: { "potion": { damage: -40, maxUses: 5, currentUses: 5 },
-"revive": { damage: -40, maxUses: 5, currentUses: 5 } }
+const topPlayer = new Player("brok", { "potion": { power: -40, maxUses: 5, currentUses: 5 } })
+const bottomPlayer = new Player("ash", { "potion": { power: -40, maxUses: 5, currentUses: 5 } })
+
+
+// const topPlayer = {
+//     name: "brok",
+//     pokemon: pokemon.loadPokemon(),
+//     bag: { "potion": { damage: -40, maxUses: 5, currentUses: 5 }}
+// }
+
+// const bottomPlayer = {
+//     name: "ash",
+//     pokemon: pokemon.loadPokemon(),
+//     bag: { "potion": { damage: -40, maxUses: 5, currentUses: 5 } }
+// }
+
+
+
+//need to make this a funciton so that it updates when they change pokemon
+updatePokemon()
+
+async function updatePokemon() {
+    let leftBanner = document.querySelector("#pokemon_info")
+    leftBanner.appendChild(generateHealthBanner(await topPlayer.getPokemon()))
+
+    let rightBanner = document.querySelector("#right-pokemon_info")
+    rightBanner.appendChild(generateHealthBanner(await bottomPlayer.getPokemon(), true))
 }
-
-const bottomPlayer = {
-    name: "ash",
-    pokemon: getPokemon(),
-    bag: { "potion": { damage: -40, maxUses: 5, currentUses: 5 } }
-}
-
-function getPokemon() {
-    const randomPokemonArray = [];
-
-    for (let i = 0; i < 1; i++) {
-        const randomPokemon = { ...pokemonList[Math.floor(Math.random() * pokemonList.length)] };
-        randomPokemonArray.push(randomPokemon);
-    }
-    return randomPokemonArray;
-}
-
-
-let leftBanner = document.querySelector("#pokemon_info")
-leftBanner.appendChild(generateHealthBanner(topPlayer.pokemon[0]))
-
-let rightBanner = document.querySelector("#right-pokemon_info")
-rightBanner.appendChild(generateHealthBanner(bottomPlayer.pokemon[0], true))
 
 let fontSizeHB = document.querySelectorAll("#bannerText")
 
@@ -193,6 +62,10 @@ window.addEventListener("resize", (e) => {
 
 fightButton.addEventListener("click", (e) => {
     const button = e.target.closest("button")
+    loadMenu(button, e.target)
+})
+
+async function loadMenu(button, target) {
     let currentPlayer
     let oponentPlayer
     if (topPlayerTurn) {
@@ -203,28 +76,27 @@ fightButton.addEventListener("click", (e) => {
         oponentPlayer = topPlayer
     }
 
-    if (e.target.id === "backButton" || !button) {
+    if (target.id === "backButton" || !button) {
         return
-    } else if (e.target.closest("button").className) {
-        menuAction(button, currentPlayer.pokemon[0].stats, oponentPlayer.pokemon[0].stats)
+    } else if (target.closest("button").className) {
+        menuAction(button, currentPlayer.currentPokemon, oponentPlayer.currentPokemon)
         topPlayerTurn = !topPlayerTurn
 
         return
     }
 
+
     actionButtons(button, currentPlayer)
-
-
-})
+}
 
 function actionButtons(button, currentPlayer = bottomPlayer) {
     let optionsMenu = document.querySelector("#buttonOptions")
     optionsMenu.innerHTML = ""
 
     if (button.id === "fight") {
-        setMenuButttons(currentPlayer.pokemon[0].attacks, optionsMenu)
+        setMenuButttons(currentPlayer.currentPokemon.attacks, optionsMenu)
     } else if (button.id === "pokemon") {
-        showAllPokemon(currentPlayer.pokemon)
+        showAllPokemon(currentPlayer.getPokemonList())
     } else if (button.id === "bag") {
         setMenuButttons(currentPlayer.bag)
     } else if (button.id === "run") {
@@ -239,43 +111,59 @@ function showAllPokemon(currentPokemon = bottomPlayer.pokemon) {
         button.textContent = `${currentPokemon[option].name} ${currentPokemon[option].stats.hpLeft}/${currentPokemon[option].stats.hp}`
         button.style.height = `49%`
         button.style.width = `49%`
-        button.classList.add(currentPokemon[option].stats.defense)
+        // console.log(option);
+
+        button.classList.add(`${option}`)
         buttonOptions.appendChild(button);
     }
 }
 
 
-function menuAction(button, currentPlayer = topPlayer.pokemon[0].stats,  oponentPokemon = bottomPlayer.pokemon[0].stats) {
-    if (Number(button.className) > 0) {
-        updateBanner(Number(button.className), oponentPokemon, !topPlayerTurn)
+function menuAction(button, currentPlayer, oponentPokemon) {
+    console.log(button);
+
+    if (Number(button.className) > 6) {
+        updateBanner(Number(button.className), oponentPokemon, currentPlayer.attacks, !topPlayerTurn, button.id)
     } else {
-        updateBanner(Number(button.className), currentPlayer, topPlayerTurn)
+        updateBanner(Number(button.className), currentPlayer, oponentPokemon.attacks, topPlayerTurn, button.id)
     }
 }
 
-function updateBanner(modifier, pokemon, currentPlayer) {
-        // attack need to be redone to attack the oposite player
-        pokemon.hpLeft -= modifier
-        let hpBanner = document.getElementById("health_value")
 
-        if (pokemon.hpLeft > pokemon.hp) {
-            pokemon.hpLeft = pokemon.hp
-        } else if (pokemon.hpLeft < 0) {
-            pokemon.hpLeft = 0
-        }
+//loading is faling here
+function updateBanner(modifier, pokemon, attacker, topPlayerTurn, buttonId) {
 
-        let getsearchBar = ""
-        if (currentPlayer) {
-            getsearchBar = "#top_hp_animate"
-        } else {
-            getsearchBar = "#bottom_hp_animate"
-            hpBanner.textContent = `${pokemon.hpLeft}/${pokemon.hp}`
-        }
 
-        let healthBar = document.querySelector(getsearchBar)
+    if (attacker[buttonId].currentUses > 0) {
+        pokemon.stats.hpLeft -= modifier
+        attacker[buttonId].currentUses -= 1
+    } else {
+        pokemon.stats.hpLeft -= 15
+    }
 
-        healthBar.style.width = `${(pokemon.hpLeft / pokemon.hp) * 100}%`
-        actionBanner.style.zIndex = -1
+    let hpBanner = document.getElementById("health_value")
+
+    if (pokemon.stats.hpLeft > pokemon.stats.hp) {
+        pokemon.stats.hpLeft = pokemon.stats.hp
+    } else if (pokemon.stats.hpLeft < 0) {
+        pokemon.stats.hpLeft = 0
+        console.log(pokemon);
+        
+        
+    }
+
+    let getsearchBar = ""
+    if (topPlayerTurn) {
+        getsearchBar = "#top_hp_animate"
+    } else {
+        getsearchBar = "#bottom_hp_animate"
+        hpBanner.textContent = `${pokemon.stats.hpLeft}/${pokemon.stats.hp}`
+    }
+
+    let healthBar = document.querySelector(getsearchBar)
+
+    healthBar.style.width = `${(pokemon.stats.hpLeft / pokemon.stats.hp) * 100}%`
+    actionBanner.style.zIndex = -1
 }
 
 
@@ -285,7 +173,16 @@ function setMenuButttons(currentPokemon) {
         button.textContent = `${option} ${currentPokemon[option].currentUses}/${currentPokemon[option].maxUses}`
         button.style.height = `49%`
         button.style.width = `49%`
-        button.classList.add(currentPokemon[option].damage)
+        // console.log(option);
+        // console.log(currentPokemon);
+
+        // console.log(currentPokemon[option].power);
+        button.id = option
+        if (!currentPokemon[option].power) {
+            button.classList.add(15)
+        } else {
+            button.classList.add(currentPokemon[option].power)
+        }
         buttonOptions.appendChild(button);
     }
 }
@@ -331,7 +228,7 @@ function generateHealthBanner(pokemon = bottomPlayer.pokemon[0], bottomRightUser
     divBanner.setAttribute(`id`, "bannerText")
 
     let nameText = document.createElement("p")
-    nameText.textContent = `${pokemon.name} ${Math.random() > 0.5 ? "⚨" : "♀"}`
+    nameText.textContent = `${pokemon.name}`
 
     let levelText = document.createElement("p")
     levelText.textContent = "Lv60"

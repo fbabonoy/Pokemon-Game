@@ -1,34 +1,3 @@
-// import { Pokemon } from "../scripts/PokemonGenerator"
-
-export class Player {
-    pokemon
-    #index = 0
-    #pokemonClass
-    constructor(name, bag, pokemon = new Pokemon()) {
-        this.name = name
-        this.bag = bag
-        this.#pokemonClass = pokemon
-    }
-
-    async getPokemon(){
-        this.pokemon = await this.#pokemonClass.loadPokemon()
-        return this.pokemon[this.#index]
-    }
-
-    get currentPokemon() {
-        return this.pokemon[this.#index]
-    }
-
-    getPokemonList(){
-        console.log(this.pokemon);
-        
-        return this.pokemon
-    }
-
-
-
-}
-
 export class Pokemon {
     #pokemonlistLink = "https://pokeapi.co/api/v2/pokemon/?offset=1&limit=100"
 
@@ -97,3 +66,22 @@ export class Pokemon {
 
 
 }
+
+// export const pokemonList = [
+//     {
+//         name: "Pikachu",
+//         stats: {
+//             hp: 100,
+//             hpLeft: 100,
+//             attack: 55,
+//             defense: 40,
+//             speed: 90
+//         },
+//         attacks: {
+//             "Thunder Shock": { damage: 40, maxUses: 10, currentUses: 10 },
+//             "Quick Attack": { damage: 20, maxUses: 15, currentUses: 15 },
+//             "Iron Tail": { damage: 50, maxUses: 10, currentUses: 10 },
+//             "Electro Ball": { damage: 60, maxUses: 5, currentUses: 5 }
+//         }
+//     }
+// ];
