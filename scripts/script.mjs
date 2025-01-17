@@ -6,6 +6,10 @@ let textBox = document.querySelector("#outer_box")
 let insideBox = document.querySelector("#info")
 let fontSizeAS = document.querySelectorAll("#action_selector p")
 
+let popOverBanner = document.querySelector("#Pop-Over")
+let button = document.createElement("button")
+
+
 let fightButton = document.querySelector("#action_selector")
 
 let actionBanner = document.querySelector("#action_banner")
@@ -26,14 +30,18 @@ const bottomPlayer = new Player("ash", { "potion": { power: -40, maxUses: 5, cur
 
 //need to make this a funciton so that it updates when they change pokemon
 updatePokemon()
+// loadGameOver()  
+
+
 
 let leftBanner = document.querySelector("#pokemon_info")
 let rightBanner = document.querySelector("#right-pokemon_info")
 
-async function updatePokemon() {    
+async function updatePokemon() {  
     if (!topPlayer.pokemon || !bottomPlayer.pokemon) {
         await topPlayer.getPokemon()
         await bottomPlayer.getPokemon()
+
     }
 
     leftBanner.innerHTML = ""
@@ -59,6 +67,18 @@ fightButton.addEventListener("click", (e) => {
     loadMenu(button, e.target)
 })
 
+button.addEventListener("click", ()=>{
+    topPlayer.pokemon = null
+    bottomPlayer.pokemon = null
+    updatePokemon().then(()=>{
+        popOverBanner.style.zIndex = -3
+
+    })
+   
+
+    
+})
+
 async function loadMenu(button, target) {
     
     if (topPlayerTurn) {
@@ -76,16 +96,39 @@ async function loadMenu(button, target) {
 
         menuAction(button, currentPlayer.currentPokemon, oponentPlayer.currentPokemon)
         topPlayerTurn = !topPlayerTurn
-        if (oponentPlayer.currentPokemon.stats.hpLeft < 1) {
+        if (oponentPlayer.currentPokemon.stats.hpLeft < 1 && oponentPlayer.pokemon.length > 1) {
             console.log("he is down")
             console.log(oponentPlayer.pokemon.shift())
             updatePokemon()
+        } else {
+            console.log("game over");
+            loadGameOver()
+            
         }
         return
     }
 
 
     actionButtons(button, currentPlayer)
+}
+
+function loadGameOver() {
+    popOverBanner.innerHTML = ""
+
+    let fragment = document.createDocumentFragment()
+
+    let gameText = document.createElement("p")
+    gameText.textContent = "Game Over" 
+    gameText.style.fontSize = `${innerWidth / 9}px`
+
+    button.textContent = "restart"
+    button.style.fontSize = `${innerWidth / 20}px`
+
+    fragment.appendChild(gameText)
+    fragment.appendChild(button)
+
+    popOverBanner.appendChild(fragment)
+    popOverBanner.style.zIndex = 3
 }
 
 function actionButtons(button, currentPlayer = bottomPlayer) {
@@ -99,7 +142,8 @@ function actionButtons(button, currentPlayer = bottomPlayer) {
     } else if (button.id === "bag") {
         setMenuButttons(currentPlayer.bag)
     } else if (button.id === "run") {
-        console.log("gameOver");
+        loadGameOver()
+        return
     }
     actionBanner.style.zIndex = 0
 }

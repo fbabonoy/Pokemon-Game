@@ -8,6 +8,7 @@ body {
 
 
 #battle_arena {
+    position: relative;
     background-color: gray;
     width: 934;
     height: 500;
@@ -372,4 +373,20 @@ body {
     flex-wrap: wrap;
     justify-content: space-between;
     /* text-align: ; */
+}
+
+
+#Pop-Over {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 105%;
+    background-color: gray;
+    /* change to zero after testing */
+    z-index: -3;
 }

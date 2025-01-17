@@ -67,7 +67,6 @@ export class Pokemon {
 
 }
 
-// export const pokemonList = [
 //     {
 //         name: "Pikachu",
 //         stats: {
@@ -84,4 +83,4 @@ export class Pokemon {
 //             "Electro Ball": { damage: 60, maxUses: 5, currentUses: 5 }
 //         }
 //     }
-// ];
+
