@@ -33,7 +33,7 @@ const bottomPlayer = new Player("ash", { "potion": { power: -40, maxUses: 5, cur
 // 
 
 //need to make this a funciton so that it updates when they change pokemon
-updatePokemon("random").then(()=>{
+updatePokemon("random").then(() => {
     startGame()
 })
 
@@ -86,11 +86,19 @@ async function startGame() {
 
 
 function generateSelector(list = [], id) {
+    let playerName = id.slice(0, -1)
+    let playerNum = id.slice(-1)
     let selectorScreen = document.createElement("div")
+    selectorScreen.style.textAlign = "center"
     let playerSelector = document.createElement("select")
     // playerSelector.type = "selector"
+    let player = document.createElement("h1")
+    player.textContent = `${playerName} ${playerNum}`
+    player.style.color = "white"
+
+    selectorScreen.appendChild(player)
     playerSelector.id = id
-    playerSelector.style.width = `${innerWidth / 10}px`
+    playerSelector.style.width = `${innerWidth / 4}px`
     playerSelector.style.color = "rgb(200, 210, 203)"
     playerSelector.style.backgroundColor = "rgb(3, 71, 21)"
 
@@ -100,6 +108,7 @@ function generateSelector(list = [], id) {
     for (let i of list) {
         let option = document.createElement("option")
         option.textContent = i
+        option.style.textAlign = "center"
         fragment.appendChild(option)
     }
 
@@ -108,28 +117,46 @@ function generateSelector(list = [], id) {
     playerSelector.addEventListener("change", loadPokemon)
 
     selectorScreen.appendChild(playerSelector)
+
+    let screen = document.createElement("div")
+    screen.id = `${playerName}selector${playerNum}`
+
+    selectorScreen.appendChild(screen)
+
     return selectorScreen
 }
 
 
 function loadPokemon(e) {
     if (e.target.id === "player1") {
-        if (topPlayer.selector.length < 4) {
+        
+        if (topPlayer.selector.length < 4 && !topPlayer.selector.includes(e.target.value)) {
             topPlayer.selector.push(e.target.value)
             console.log(topPlayer.selector)
+            showListOfSelectedPokemon("playerselector1", topPlayer)
+            
         }
 
     } else {
-        if (bottomPlayer.selector.length < 4) {
-
-        bottomPlayer.selector.push(e.target.value)
-        console.log(bottomPlayer.selector)
+        if (bottomPlayer.selector.length < 4 && !bottomPlayer.selector.includes(e.target.value)) {
+            bottomPlayer.selector.push(e.target.value)
+            showListOfSelectedPokemon("playerselector2", bottomPlayer)
 
         }
-
     }
 
 
+}
+
+function showListOfSelectedPokemon(where, player) {
+    let list = document.querySelector(`#${where}`)
+            list.innerHTML = ""
+            for (let i of player.selector) {
+                let pokemonName = document.createElement("p")
+                pokemonName.textContent = i
+                pokemonName.classList.add("pokemonName")
+                list.appendChild(pokemonName)
+            }
 }
 
 
@@ -137,7 +164,7 @@ let leftBanner = document.querySelector("#pokemon_info")
 let rightBanner = document.querySelector("#right-pokemon_info")
 
 async function updatePokemon(selection) {
-    if (topPlayer.pokemon.length === 0 || bottomPlayer.pokemon.length === 0 ) {
+    if (topPlayer.pokemon.length === 0 || bottomPlayer.pokemon.length === 0) {
         await topPlayer.getPokemon(selection)
         await bottomPlayer.getPokemon(selection)
 
@@ -173,14 +200,14 @@ restartBtn.addEventListener("click", () => {
 
 gameStart.addEventListener("click", (e) => {
     console.log(e.target.className);
-    if (topPlayer.selector.length > 3 && topPlayer.selector.length === bottomPlayer.selector.length){
+    if (topPlayer.selector.length > 3 && topPlayer.selector.length === bottomPlayer.selector.length) {
         updatePokemon(e.target.className).then(() => {
             popOverBanner.style.zIndex = -3
         })
     } else {
         alert("you need 4 pokemon")
     }
-    
+
 })
 
 async function loadMenu(button, target) {
@@ -208,7 +235,7 @@ async function loadMenu(button, target) {
             console.log(oponentPlayer.pokemon.shift())
             updatePokemon()
 
-        } else if (oponentPlayer.pokemon.length === 1){
+        } else if (oponentPlayer.pokemon.length === 1) {
             loadGameOver()
         }
         return
