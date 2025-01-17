@@ -1,5 +1,4 @@
-import { Player } from "./player.js";
-import { Pokemon } from "./PokemonGenerator.js";
+import { Player } from "./player.mjs";
 let fightArea = document.getElementById("battle_arena")
 let body = document.querySelector("body")
 let fightAnimation = document.querySelector("#fight_animation")
@@ -17,36 +16,31 @@ let rightPokemonSprite = document.querySelector("#right_pokemon")
 let leftPokemonSprite = document.querySelector("#left_pokemon")
 
 let topPlayerTurn = false
-let topPokemonIndex = 0
-let bottomPokemonIndex = 0
+let currentPlayer
+let oponentPlayer
 
 const topPlayer = new Player("brok", { "potion": { power: -40, maxUses: 5, currentUses: 5 } })
 const bottomPlayer = new Player("ash", { "potion": { power: -40, maxUses: 5, currentUses: 5 } })
-
-
-// const topPlayer = {
-//     name: "brok",
-//     pokemon: pokemon.loadPokemon(),
-//     bag: { "potion": { damage: -40, maxUses: 5, currentUses: 5 }}
-// }
-
-// const bottomPlayer = {
-//     name: "ash",
-//     pokemon: pokemon.loadPokemon(),
-//     bag: { "potion": { damage: -40, maxUses: 5, currentUses: 5 } }
-// }
 
 
 
 //need to make this a funciton so that it updates when they change pokemon
 updatePokemon()
 
-async function updatePokemon() {
-    let leftBanner = document.querySelector("#pokemon_info")
-    leftBanner.appendChild(generateHealthBanner(await topPlayer.getPokemon()))
+let leftBanner = document.querySelector("#pokemon_info")
+let rightBanner = document.querySelector("#right-pokemon_info")
 
-    let rightBanner = document.querySelector("#right-pokemon_info")
-    rightBanner.appendChild(generateHealthBanner(await bottomPlayer.getPokemon(), true))
+async function updatePokemon() {    
+    if (!topPlayer.pokemon || !bottomPlayer.pokemon) {
+        await topPlayer.getPokemon()
+        await bottomPlayer.getPokemon()
+    }
+
+    leftBanner.innerHTML = ""
+    leftBanner.appendChild(generateHealthBanner(topPlayer.currentPokemon))
+
+    rightBanner.innerHTML = ""
+    rightBanner.appendChild(generateHealthBanner(bottomPlayer.currentPokemon, true))
 }
 
 let fontSizeHB = document.querySelectorAll("#bannerText")
@@ -66,8 +60,7 @@ fightButton.addEventListener("click", (e) => {
 })
 
 async function loadMenu(button, target) {
-    let currentPlayer
-    let oponentPlayer
+    
     if (topPlayerTurn) {
         currentPlayer = topPlayer
         oponentPlayer = bottomPlayer
@@ -79,9 +72,15 @@ async function loadMenu(button, target) {
     if (target.id === "backButton" || !button) {
         return
     } else if (target.closest("button").className) {
+        if (Number(button.className) === currentPlayer.index) return
+
         menuAction(button, currentPlayer.currentPokemon, oponentPlayer.currentPokemon)
         topPlayerTurn = !topPlayerTurn
-
+        if (oponentPlayer.currentPokemon.stats.hpLeft < 1) {
+            console.log("he is down")
+            console.log(oponentPlayer.pokemon.shift())
+            updatePokemon()
+        }
         return
     }
 
@@ -120,26 +119,27 @@ function showAllPokemon(currentPokemon = bottomPlayer.pokemon) {
 
 
 function menuAction(button, currentPlayer, oponentPokemon) {
-    console.log(button);
 
     if (Number(button.className) > 6) {
         updateBanner(Number(button.className), oponentPokemon, currentPlayer.attacks, !topPlayerTurn, button.id)
+    } else if(Number(button.className) >= 0){
+    console.log(button.className);
+
+        changePokemon(Number(button.className))
     } else {
-        updateBanner(Number(button.className), currentPlayer, oponentPokemon.attacks, topPlayerTurn, button.id)
+        updateBanner(Number(button.className), currentPlayer, oponentPlayer.bag, topPlayerTurn, button.id)
     }
+}
+
+function changePokemon(index){
+    currentPlayer.index = index
+    updatePokemon()
+    actionBanner.style.zIndex = -1
 }
 
 
 //loading is faling here
 function updateBanner(modifier, pokemon, attacker, topPlayerTurn, buttonId) {
-
-
-    if (attacker[buttonId].currentUses > 0) {
-        pokemon.stats.hpLeft -= modifier
-        attacker[buttonId].currentUses -= 1
-    } else {
-        pokemon.stats.hpLeft -= 15
-    }
 
     let hpBanner = document.getElementById("health_value")
 
@@ -147,9 +147,13 @@ function updateBanner(modifier, pokemon, attacker, topPlayerTurn, buttonId) {
         pokemon.stats.hpLeft = pokemon.stats.hp
     } else if (pokemon.stats.hpLeft < 0) {
         pokemon.stats.hpLeft = 0
-        console.log(pokemon);
-        
-        
+    }
+    
+    if (attacker[buttonId].currentUses > 0) {
+        pokemon.stats.hpLeft -= modifier
+        attacker[buttonId].currentUses -= 1
+    } else {
+        pokemon.stats.hpLeft -= 15
     }
 
     let getsearchBar = ""
