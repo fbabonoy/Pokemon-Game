@@ -4,13 +4,17 @@ import { Pokemon } from "./PokemonGenerator.mjs";
 let fightArea = document.getElementById("battle_arena")
 let body = document.querySelector("body")
 let fightAnimation = document.querySelector("#fight_animation")
+
 let textBox = document.querySelector("#outer_box")
+let info = document.querySelector("#info")
+
 let insideBox = document.querySelector("#info")
 let fontSizeAS = document.querySelectorAll("#action_selector p")
 
 let popOverBanner = document.querySelector("#Pop-Over")
 let restartBtn = document.createElement("button")
 let gameStart = document.createElement("button")
+
 
 
 let fightButton = document.querySelector("#action_selector")
@@ -129,12 +133,12 @@ function generateSelector(list = [], id) {
 
 function loadPokemon(e) {
     if (e.target.id === "player1") {
-        
+
         if (topPlayer.selector.length < 4 && !topPlayer.selector.includes(e.target.value)) {
             topPlayer.selector.push(e.target.value)
             console.log(topPlayer.selector)
             showListOfSelectedPokemon("playerselector1", topPlayer)
-            
+
         }
 
     } else {
@@ -150,13 +154,13 @@ function loadPokemon(e) {
 
 function showListOfSelectedPokemon(where, player) {
     let list = document.querySelector(`#${where}`)
-            list.innerHTML = ""
-            for (let i of player.selector) {
-                let pokemonName = document.createElement("p")
-                pokemonName.textContent = i
-                pokemonName.classList.add("pokemonName")
-                list.appendChild(pokemonName)
-            }
+    list.innerHTML = ""
+    for (let i of player.selector) {
+        let pokemonName = document.createElement("p")
+        pokemonName.textContent = i
+        pokemonName.classList.add("pokemonName")
+        list.appendChild(pokemonName)
+    }
 }
 
 
@@ -164,6 +168,9 @@ let leftBanner = document.querySelector("#pokemon_info")
 let rightBanner = document.querySelector("#right-pokemon_info")
 
 async function updatePokemon(selection) {
+    info.innerHTML = ""
+    info.textContent = `player one's turm`
+
     if (topPlayer.pokemon.length === 0 || bottomPlayer.pokemon.length === 0) {
         await topPlayer.getPokemon(selection)
         await bottomPlayer.getPokemon(selection)
@@ -210,12 +217,14 @@ gameStart.addEventListener("click", (e) => {
 
 })
 
+
 async function loadMenu(button, target) {
 
     if (topPlayerTurn) {
         currentPlayer = topPlayer
         oponentPlayer = bottomPlayer
     } else {
+
         currentPlayer = bottomPlayer
         oponentPlayer = topPlayer
     }
@@ -238,11 +247,16 @@ async function loadMenu(button, target) {
         } else if (oponentPlayer.pokemon.length === 1) {
             loadGameOver()
         }
+
+        info.innerHTML = ""
+        info.textContent = `player ${topPlayerTurn ? "two": "one"}'s turm`
         return
     }
 
 
     actionButtons(button, currentPlayer)
+
+
 }
 
 function loadGameOver() {
