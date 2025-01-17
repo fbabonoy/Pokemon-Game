@@ -1,8 +1,9 @@
 import { Pokemon } from "./PokemonGenerator.mjs"
 
 export class Player {
-    pokemon
+    pokemon = []
     index = 0
+    selector = []
     #pokemonClass
     constructor(name, bag, pokemon = new Pokemon()) {
         this.name = name
@@ -10,8 +11,17 @@ export class Player {
         this.#pokemonClass = pokemon
     }
 
-    async getPokemon(){
-        this.pokemon = await this.#pokemonClass.loadPokemon()
+    async getSelectorList() {
+        return await this.#pokemonClass.list()
+    }
+
+    async getPokemon(mode){
+        if (mode === "random") {
+            this.pokemon = await this.#pokemonClass.loadRandomPokemon()
+        } else {
+            this.pokemon = await this.#pokemonClass.loadPokemon(this.selector)
+            
+        }
         return this.pokemon[this.index]
     }
 

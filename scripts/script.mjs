@@ -1,4 +1,6 @@
 import { Player } from "./player.mjs";
+import { Pokemon } from "./PokemonGenerator.mjs";
+
 let fightArea = document.getElementById("battle_arena")
 let body = document.querySelector("body")
 let fightAnimation = document.querySelector("#fight_animation")
@@ -7,7 +9,8 @@ let insideBox = document.querySelector("#info")
 let fontSizeAS = document.querySelectorAll("#action_selector p")
 
 let popOverBanner = document.querySelector("#Pop-Over")
-let button = document.createElement("button")
+let restartBtn = document.createElement("button")
+let gameStart = document.createElement("button")
 
 
 let fightButton = document.querySelector("#action_selector")
@@ -29,18 +32,112 @@ const bottomPlayer = new Player("ash", { "potion": { power: -40, maxUses: 5, cur
 
 
 //need to make this a funciton so that it updates when they change pokemon
-updatePokemon()
+updatePokemon("random").then(()=>{
+    startGame()
+}
+
+)
+
 // loadGameOver()  
 
+async function startGame() {
+    popOverBanner.innerHTML = ""
+    topPlayer.selector = []
+    bottomPlayer.selector = []
+    topPlayer.pokemon = []
+    bottomPlayer.pokemon = []
+
+
+
+    let fragment = document.createDocumentFragment()
+
+    let list = await new Pokemon().list()
+
+    let playersView = document.createElement("div")
+    let player1Selector = generateSelector(list, "player1")
+    let player2Selector = generateSelector(list, "player2")
+    // playersView.style.width = "100px"
+    // playersView.style.height = "100px"
+    playersView.classList.add("selectorView")
+
+
+
+    playersView.appendChild(player1Selector)
+    playersView.appendChild(player2Selector)
+
+
+
+    gameStart.style.fontSize = `20px`
+
+    //TODO: need random toggle
+    gameStart.classList.add("select")
+    gameStart.textContent = "Start Game"
+
+    fragment.appendChild(playersView)
+    fragment.appendChild(gameStart)
+    popOverBanner.appendChild(fragment)
+
+    popOverBanner.style.zIndex = 3
+
+}
+
+
+
+function generateSelector(list = [], id) {
+    let selectorScreen = document.createElement("div")
+    let playerSelector = document.createElement("select")
+    // playerSelector.type = "selector"
+    playerSelector.id = id
+    playerSelector.style.width = `${innerWidth / 10}px`
+    playerSelector.style.color = "rgb(200, 210, 203)"
+    playerSelector.style.backgroundColor = "rgb(3, 71, 21)"
+
+    let fragment = document.createDocumentFragment()
+
+
+    for (let i of list) {
+        let option = document.createElement("option")
+        option.textContent = i
+        fragment.appendChild(option)
+    }
+
+    playerSelector.appendChild(fragment)
+
+    playerSelector.addEventListener("change", loadPokemon)
+
+    selectorScreen.appendChild(playerSelector)
+    return selectorScreen
+}
+
+
+function loadPokemon(e) {
+    if (e.target.id === "player1") {
+        if (topPlayer.selector.length < 4) {
+            topPlayer.selector.push(e.target.value)
+            console.log(topPlayer.selector)
+        }
+
+    } else {
+        if (bottomPlayer.selector.length < 4) {
+
+        bottomPlayer.selector.push(e.target.value)
+        console.log(bottomPlayer.selector)
+
+        }
+
+    }
+
+
+}
 
 
 let leftBanner = document.querySelector("#pokemon_info")
 let rightBanner = document.querySelector("#right-pokemon_info")
 
-async function updatePokemon() {  
-    if (!topPlayer.pokemon || !bottomPlayer.pokemon) {
-        await topPlayer.getPokemon()
-        await bottomPlayer.getPokemon()
+async function updatePokemon(selection) {
+    if (topPlayer.pokemon.length === 0 || bottomPlayer.pokemon.length === 0 ) {
+        await topPlayer.getPokemon(selection)
+        await bottomPlayer.getPokemon(selection)
 
     }
 
@@ -67,20 +164,25 @@ fightButton.addEventListener("click", (e) => {
     loadMenu(button, e.target)
 })
 
-button.addEventListener("click", ()=>{
-    topPlayer.pokemon = null
-    bottomPlayer.pokemon = null
-    updatePokemon().then(()=>{
-        popOverBanner.style.zIndex = -3
+restartBtn.addEventListener("click", () => {
+    startGame()
 
-    })
-   
+})
 
+gameStart.addEventListener("click", (e) => {
+    console.log(e.target.className);
+    if (topPlayer.selector.length > 3 && topPlayer.selector.length === bottomPlayer.selector.length){
+        updatePokemon(e.target.className).then(() => {
+            popOverBanner.style.zIndex = -3
+        })
+    } else {
+        alert("you need 4 pokemon")
+    }
     
 })
 
 async function loadMenu(button, target) {
-    
+
     if (topPlayerTurn) {
         currentPlayer = topPlayer
         oponentPlayer = bottomPlayer
@@ -96,14 +198,16 @@ async function loadMenu(button, target) {
 
         menuAction(button, currentPlayer.currentPokemon, oponentPlayer.currentPokemon)
         topPlayerTurn = !topPlayerTurn
+        console.log(oponentPlayer.currentPokemon.stats.hpLeft)
+        console.log(oponentPlayer.pokemon.length);
+
         if (oponentPlayer.currentPokemon.stats.hpLeft < 1 && oponentPlayer.pokemon.length > 1) {
             console.log("he is down")
             console.log(oponentPlayer.pokemon.shift())
             updatePokemon()
-        } else {
-            console.log("game over");
+
+        } else if (oponentPlayer.pokemon.length === 1){
             loadGameOver()
-            
         }
         return
     }
@@ -118,14 +222,14 @@ function loadGameOver() {
     let fragment = document.createDocumentFragment()
 
     let gameText = document.createElement("p")
-    gameText.textContent = "Game Over" 
+    gameText.textContent = "Game Over"
     gameText.style.fontSize = `${innerWidth / 9}px`
 
-    button.textContent = "restart"
-    button.style.fontSize = `${innerWidth / 20}px`
+    restartBtn.textContent = "restart"
+    restartBtn.style.fontSize = `${innerWidth / 20}px`
 
     fragment.appendChild(gameText)
-    fragment.appendChild(button)
+    fragment.appendChild(restartBtn)
 
     popOverBanner.appendChild(fragment)
     popOverBanner.style.zIndex = 3
@@ -166,8 +270,8 @@ function menuAction(button, currentPlayer, oponentPokemon) {
 
     if (Number(button.className) > 6) {
         updateBanner(Number(button.className), oponentPokemon, currentPlayer.attacks, !topPlayerTurn, button.id)
-    } else if(Number(button.className) >= 0){
-    console.log(button.className);
+    } else if (Number(button.className) >= 0) {
+        console.log(button.className);
 
         changePokemon(Number(button.className))
     } else {
@@ -175,7 +279,7 @@ function menuAction(button, currentPlayer, oponentPokemon) {
     }
 }
 
-function changePokemon(index){
+function changePokemon(index) {
     currentPlayer.index = index
     updatePokemon()
     actionBanner.style.zIndex = -1
@@ -192,7 +296,6 @@ function updateBanner(modifier, pokemon, attacker, topPlayerTurn, buttonId) {
     } else if (pokemon.stats.hpLeft < 0) {
         pokemon.stats.hpLeft = 0
     }
-    
     if (attacker[buttonId].currentUses > 0) {
         pokemon.stats.hpLeft -= modifier
         attacker[buttonId].currentUses -= 1
@@ -238,6 +341,8 @@ function setMenuButttons(currentPokemon) {
 backButton.addEventListener("click", () => {
     actionBanner.style.zIndex = -1
 })
+
+
 
 function resizeGameBoard() {
     if (window.innerWidth > 1018 && window.innerHeight < 700) {

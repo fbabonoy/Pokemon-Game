@@ -51,7 +51,7 @@ export class Pokemon {
         }
     }
 
-    async loadPokemon() {
+    async loadRandomPokemon() {
         let list = await this.list()
     
         const randomPokemonArray = [];
@@ -62,6 +62,18 @@ export class Pokemon {
         }
         // console.log(randomPokemonArray);
         return randomPokemonArray
+    }
+
+    async loadPokemon(list) {
+        const pokemonArray = [];
+
+        for (let i in list) {
+            const name = list[i]
+            pokemonArray.push(await this.#getpokemonData(name));
+        }
+        // console.log(randomPokemonArray);
+        return pokemonArray
+
     }
 
 
