@@ -30,14 +30,14 @@ const topPlayer = new Player("brok", { "potion": { power: -40, maxUses: 5, curre
 const bottomPlayer = new Player("ash", { "potion": { power: -40, maxUses: 5, currentUses: 5 } })
 
 
+// 
 
 //need to make this a funciton so that it updates when they change pokemon
 updatePokemon("random").then(()=>{
     startGame()
-}
+})
 
-)
-
+popOverBanner.style.zIndex = 3
 // loadGameOver()  
 
 async function startGame() {
@@ -46,6 +46,8 @@ async function startGame() {
     bottomPlayer.selector = []
     topPlayer.pokemon = []
     bottomPlayer.pokemon = []
+    popOverBanner.style.opacity = `95%`;
+
 
 
 
