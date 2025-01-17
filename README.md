@@ -30,7 +30,6 @@ This project is a two-player Pokemon game where players face off using their Pok
 - **HTML:** For structuring the game elements.
 - **CSS:** For styling and animations.
 - **JavaScript:** For game logic, animations, and DOM manipulation.
-- **Canvas (optional):** To enhance animations and create dynamic effects.
 
 
 ## Game Mechanics
@@ -78,7 +77,7 @@ This project is a two-player Pokemon game where players face off using their Pok
 
 ---
 
-## Animations and Visual Effects
+## working on Animations and Visual Effects
 1. **Attack Animations:**
    - Use CSS keyframes or Canvas for dynamic attack effects.
    - Example: A lightning bolt for an electric attack.
@@ -94,7 +93,7 @@ This project is a two-player Pokemon game where players face off using their Pok
 
 ---
 
-## Stretch Goals
+## Future Goals
 1. **Advanced Animations:**
    - Use Canvas for particle effects and complex animations.
 2. **Sound Effects:**
