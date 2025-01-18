@@ -215,7 +215,7 @@ gameStart.addEventListener("click", (e) => {
 })
 
 
-async function loadMenu(button, target) {
+function loadMenu(button, target) {
 
     if (topPlayerTurn) {
         currentPlayer = topPlayer
@@ -263,12 +263,17 @@ function loadGameOver() {
 
     let gameText = document.createElement("p")
     gameText.textContent = "Game Over"
-    gameText.style.fontSize = `${innerWidth / 9}px`
+    gameText.style.fontSize = `${innerWidth / 15}px`
+
+    let whoLost = document.createElement("p")
+    whoLost.textContent = `${!topPlayerTurn? "player 1" : "player 2"} lost`
+    whoLost.style.fontSize = `${innerWidth / 25}px`
 
     restartBtn.textContent = "restart"
-    restartBtn.style.fontSize = `${innerWidth / 20}px`
+    restartBtn.style.fontSize = `${innerWidth / 25}px`
 
     fragment.appendChild(gameText)
+    fragment.appendChild(whoLost)
     fragment.appendChild(restartBtn)
 
     popOverBanner.appendChild(fragment)
@@ -450,6 +455,28 @@ function healthValue(hpUser) {
 
 function resizeGameBoard() {
     let bannerText = document.querySelectorAll(".bannerText")
+    let selector = document.querySelectorAll(".selectorView")
+    let selectPok = document.querySelectorAll(".select")
+    let player1 = document.querySelector("#player1")
+    let player2 = document.querySelector("#player2")
+
+    if (player1) {
+        player1.style.width = "100%"
+        player2.style.width = "100%"
+
+    }
+    if (selectPok) {
+
+        for (let banner of selectPok) {
+            banner.style.fontSize = `${window.innerWidth * 0.02}px`
+        }
+    }
+
+    if (selector) {
+        for (let banner of selector) {
+            banner.style.fontSize = `${window.innerWidth * 0.02}px`
+        }
+    }
 
     if (bannerText) {
         for (let banner of bannerText) {
