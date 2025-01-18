@@ -74,7 +74,7 @@ async function startGame() {
     fragment.appendChild(gameStart)
     popOverBanner.appendChild(fragment)
 
-    popOverBanner.style.zIndex = -3
+    popOverBanner.style.zIndex = 3
 
 }
 
@@ -100,7 +100,9 @@ function generateSelector(list = [], id) {
 
     let fragment = document.createDocumentFragment()
 
-
+    let option = document.createElement("option")
+    option.textContent = "select Pokemon"
+    fragment.appendChild(option)
     for (let i of list) {
         let option = document.createElement("option")
         option.textContent = i
@@ -124,6 +126,8 @@ function generateSelector(list = [], id) {
 
 
 function loadPokemon(e) {
+    if (e.target.value === "select Pokemon") return
+    
     if (e.target.id === "player1") {
 
         if (topPlayer.selector.length < 4 && !topPlayer.selector.includes(e.target.value)) {
@@ -198,7 +202,8 @@ restartBtn.addEventListener("click", () => {
 })
 
 gameStart.addEventListener("click", (e) => {
-    console.log(e.target.className);
+    console.log(e.target.className, "hello");
+    // if (e.target.) return
     if (topPlayer.selector.length > 3 && topPlayer.selector.length === bottomPlayer.selector.length) {
         updatePokemon(e.target.className).then(() => {
             popOverBanner.style.zIndex = -3
@@ -483,8 +488,6 @@ function resizeGameBoard() {
 
 function resizeButtons(font, size = "large") {
     font.forEach((e) => {
-        e.style.fontSize = size
-        e.style.testShadow = `30px 1px 0px black\,-1px 1px 0px black\,1px -1px 0px black\,-1px -1px 0px black`
-        
+        e.style.fontSize = size        
     })
 }
