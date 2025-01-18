@@ -34,15 +34,13 @@ const topPlayer = new Player("brok", { "potion": { power: -40, maxUses: 5, curre
 const bottomPlayer = new Player("ash", { "potion": { power: -40, maxUses: 5, currentUses: 5 } })
 
 
-// 
 
-//need to make this a funciton so that it updates when they change pokemon
 updatePokemon("random").then(() => {
     startGame()
+
 })
 
 popOverBanner.style.zIndex = 3
-// loadGameOver()  
 
 async function startGame() {
     popOverBanner.innerHTML = ""
@@ -52,9 +50,6 @@ async function startGame() {
     bottomPlayer.pokemon = []
     popOverBanner.style.opacity = `95%`;
 
-
-
-
     let fragment = document.createDocumentFragment()
 
     let list = await new Pokemon().list()
@@ -62,11 +57,7 @@ async function startGame() {
     let playersView = document.createElement("div")
     let player1Selector = generateSelector(list, "player1")
     let player2Selector = generateSelector(list, "player2")
-    // playersView.style.width = "100px"
-    // playersView.style.height = "100px"
     playersView.classList.add("selectorView")
-
-
 
     playersView.appendChild(player1Selector)
     playersView.appendChild(player2Selector)
@@ -83,7 +74,7 @@ async function startGame() {
     fragment.appendChild(gameStart)
     popOverBanner.appendChild(fragment)
 
-    popOverBanner.style.zIndex = 3
+    popOverBanner.style.zIndex = -3
 
 }
 
@@ -92,11 +83,12 @@ async function startGame() {
 function generateSelector(list = [], id) {
     let playerName = id.slice(0, -1)
     let playerNum = id.slice(-1)
-    let selectorScreen = document.createElement("div")
-    selectorScreen.style.textAlign = "center"
     let playerSelector = document.createElement("select")
-    // playerSelector.type = "selector"
+    let selectorScreen = document.createElement("div")
     let player = document.createElement("h1")
+
+    selectorScreen.style.textAlign = "center"
+
     player.textContent = `${playerName} ${playerNum}`
     player.style.color = "white"
 
@@ -249,7 +241,7 @@ async function loadMenu(button, target) {
         }
 
         info.innerHTML = ""
-        info.textContent = `player ${topPlayerTurn ? "two": "one"}'s turm`
+        info.textContent = `player ${topPlayerTurn ? "two" : "one"}'s turm`
         return
     }
 
@@ -387,41 +379,13 @@ backButton.addEventListener("click", () => {
 
 
 
-function resizeGameBoard() {
-    if (window.innerWidth > 1018 && window.innerHeight < 700) {
-        return
-    } else if (window.innerWidth < 934 || window.innerHeight < 700) {
-        fightArea.style.width = `934px`
-        fightArea.style.height = `500px`
-        resizeButtons(fontSizeHB, `${window.innerWidth * 0.033}px`)
-        return
-    }
 
-    body.style.minHeight = `${window.innerHeight}px`
-    resizeButtons(fontSizeAS, `${window.innerWidth * 0.025}px`)
-    resizeButtons(fontSizeHB, `${window.innerWidth * 0.025}px`)
-
-    fightArea.style.width = `${window.innerWidth * 0.8}px`
-    fightArea.style.height = `${window.innerHeight * 0.8}px`
-
-    textBox.style.height = "100%"
-    textBox.style.width = "50%"
-
-    insideBox.style.height = "88%"
-    insideBox.style.width = "93%"
-}
-
-function resizeButtons(font, size = "large") {
-    font.forEach((e) => {
-        e.style.fontSize = size
-    })
-}
 
 function generateHealthBanner(pokemon = bottomPlayer.pokemon[0], bottomRightUser = false) {
     let bannerFragment = document.createDocumentFragment()
 
     let divBanner = document.createElement("div")
-    divBanner.setAttribute(`id`, "bannerText")
+    divBanner.setAttribute(`class`, "bannerText")
 
     let nameText = document.createElement("p")
     nameText.textContent = `${pokemon.name}`
@@ -478,3 +442,49 @@ function healthValue(hpUser) {
 }
 
 
+
+function resizeGameBoard() {
+    let bannerText = document.querySelectorAll(".bannerText")
+
+    if (bannerText) {
+        for (let banner of bannerText) {
+            console.log(banner);
+            banner.style.fontSize = `${window.innerWidth * 0.03}px`
+        }
+
+    }
+
+    resizeButtons(fontSizeAS, `${window.innerWidth * 0.025}px`)
+    resizeButtons(fontSizeHB, `${window.innerWidth * 0.025}px`)
+
+    if (window.innerWidth > 1018 && window.innerHeight < 700) {
+        return
+    } else if (window.innerWidth < 934 || window.innerHeight < 700) {
+        fightArea.style.width = `934px`
+        fightArea.style.height = `500px`
+        resizeButtons(fontSizeHB, `${window.innerWidth * 0.033}px`)
+        return
+    }
+
+    body.style.minHeight = `${window.innerHeight}px`
+
+
+    fightArea.style.width = `${window.innerWidth * 0.8}px`
+    fightArea.style.height = `${window.innerHeight * 0.8}px`
+
+    textBox.style.height = "100%"
+    textBox.style.width = "50%"
+    insideBox.style.height = "88%"
+    insideBox.style.width = "93%"
+
+
+
+}
+
+function resizeButtons(font, size = "large") {
+    font.forEach((e) => {
+        e.style.fontSize = size
+        e.style.testShadow = `30px 1px 0px black\,-1px 1px 0px black\,1px -1px 0px black\,-1px -1px 0px black`
+        
+    })
+}
