@@ -43,7 +43,6 @@ updatePokemon("random").then(() => {
 popOverBanner.style.zIndex = 3
 popOverBanner.style.opacity = `95%`;
 
-
 async function startGame() {
     popOverBanner.innerHTML = ""
     topPlayer.selector = []
@@ -206,12 +205,19 @@ restartBtn.addEventListener("click", () => {
 gameStart.addEventListener("click", (e) => {
     console.log(e.target.className, "hello");
     // if (e.target.) return
-    if (topPlayer.selector.length > 3 && topPlayer.selector.length === bottomPlayer.selector.length) {
+    if (topPlayer.selector.length < 4 && topPlayer.selector.length === bottomPlayer.selector.length) {
         updatePokemon(e.target.className).then(() => {
             popOverBanner.style.zIndex = -3
         })
     } else {
-        alert("you need 4 pokemon")
+        let length
+        if (topPlayer.selector.length > bottomPlayer.selector.length) {
+            length = topPlayer.selector.length
+        } else {
+            length = bottomPlayer.selector.length
+        }
+        alert(`Each player needs ${length} pokemon and no more than 4`)
+
     }
 
 })
@@ -238,12 +244,14 @@ function loadMenu(button, target) {
         console.log(oponentPlayer.currentPokemon.stats.hpLeft)
         console.log(oponentPlayer.pokemon.length);
 
-        if (oponentPlayer.currentPokemon.stats.hpLeft < 1 && oponentPlayer.pokemon.length > 1) {
+        if (oponentPlayer.currentPokemon.stats.hpLeft <= 0 && oponentPlayer.pokemon.length > 0) {
             console.log("he is down")
             console.log(oponentPlayer.pokemon.shift())
             updatePokemon()
 
-        } else if (oponentPlayer.pokemon.length === 1) {
+        } 
+
+        if (oponentPlayer.pokemon.length === 0) {
             loadGameOver()
         }
 
@@ -259,6 +267,7 @@ function loadMenu(button, target) {
 }
 
 function loadGameOver() {
+    topPlayerTurn = false
     popOverBanner.innerHTML = ""
 
     let fragment = document.createDocumentFragment()
