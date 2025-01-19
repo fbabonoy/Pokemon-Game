@@ -335,9 +335,11 @@ body {
 #health_value {
     /* font-size: x-large; */
     width: 60%;
+    height: 15%;
     text-align: center;
+    justify-content: center;
     position: absolute;
-    bottom: -15%;
+    bottom: 32%;
     right: 0;
     background-color: rgb(201, 200, 200);
     padding-inline: 4%;
@@ -347,6 +349,7 @@ body {
     font-weight: bold;
     font-family: "Tiny5", serif;
     font-style: normal;
+    font-size: medium;
 }
 
 #action_banner {
@@ -411,4 +414,10 @@ body {
 
 .pokemonName {
     color: aliceblue;
+}
+
+.animationHealth {
+    position: relative;
+    height: 100%;
+    width: 100%;
 }

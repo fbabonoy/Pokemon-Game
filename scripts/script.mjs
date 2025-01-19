@@ -41,6 +41,8 @@ updatePokemon("random").then(() => {
 })
 
 popOverBanner.style.zIndex = 3
+popOverBanner.style.opacity = `95%`;
+
 
 async function startGame() {
     popOverBanner.innerHTML = ""
@@ -408,6 +410,7 @@ function generateHealthBanner(pokemon = bottomPlayer.pokemon[0], bottomRightUser
 
 
     let healthInfo = document.createElement("div")
+    healthInfo.classList.add("animationHealth")
     healthInfo.style.width = "100%"
 
     let healthBar = document.createElement("div")
@@ -459,10 +462,14 @@ function resizeGameBoard() {
     let selectPok = document.querySelectorAll(".select")
     let player1 = document.querySelector("#player1")
     let player2 = document.querySelector("#player2")
+    let healthValue = document.querySelector("#health_value")
+
+    
 
     if (player1) {
         player1.style.width = "100%"
         player2.style.width = "100%"
+        healthValue.style.fontSize = "90%"
 
     }
     if (selectPok) {
@@ -480,7 +487,6 @@ function resizeGameBoard() {
 
     if (bannerText) {
         for (let banner of bannerText) {
-            console.log(banner);
             banner.style.fontSize = `${window.innerWidth * 0.03}px`
         }
 
