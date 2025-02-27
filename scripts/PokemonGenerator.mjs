@@ -1,5 +1,5 @@
 export class Pokemon {
-    #pokemonlistLink = "https://pokeapi.co/api/v2/pokemon/?offset=1&limit=100"
+    #pokemonlistLink = "https://pokeapi.co/api/v2/pokemon/?offset=1&limit=30"
 
     pokemonlist = []
     async list() {
