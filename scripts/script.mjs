@@ -186,9 +186,23 @@ let fontSizeHB = document.querySelectorAll("#bannerText")
 
 window.addEventListener("DOMContentLoaded", (e) => {
     resizeGameBoard()
+    // Force layout recalculation on mobile
+    setTimeout(() => {
+        resizeGameBoard()
+    }, 100)
 })
 
 window.addEventListener("resize", (e) => {
+    resizeGameBoard()
+})
+
+window.addEventListener("orientationchange", (e) => {
+    setTimeout(() => {
+        resizeGameBoard()
+    }, 100)
+})
+
+window.addEventListener("load", (e) => {
     resizeGameBoard()
 })
 
@@ -204,10 +218,23 @@ restartBtn.addEventListener("click", () => {
 
 gameStart.addEventListener("click", (e) => {
     console.log(e.target.className, "hello");
-    // if (e.target.) return
-    if (topPlayer.selector.length < 4 && topPlayer.selector.length === bottomPlayer.selector.length) {
+    
+    // If no Pokemon selected, start with random Pokemon
+    if (topPlayer.selector.length === 0 && bottomPlayer.selector.length === 0) {
+        updatePokemon("random").then(() => {
+            popOverBanner.style.zIndex = -3
+            // Force layout recalculation after game starts
+            setTimeout(() => {
+                resizeGameBoard()
+            }, 50)
+        })
+    } else if (topPlayer.selector.length < 4 && topPlayer.selector.length === bottomPlayer.selector.length) {
         updatePokemon(e.target.className).then(() => {
             popOverBanner.style.zIndex = -3
+            // Force layout recalculation after game starts
+            setTimeout(() => {
+                resizeGameBoard()
+            }, 50)
         })
     } else {
         let length
@@ -217,9 +244,7 @@ gameStart.addEventListener("click", (e) => {
             length = bottomPlayer.selector.length
         }
         alert(`Each player needs ${length} pokemon and no more than 4`)
-
     }
-
 })
 
 
@@ -306,6 +331,12 @@ function actionButtons(button, currentPlayer = bottomPlayer) {
         return
     }
     actionBanner.style.zIndex = 0
+    
+    // Resize buttons after they're created
+    setTimeout(() => {
+        let buttonOptions = document.querySelectorAll("#buttonOptions button")
+        resizeButtons(buttonOptions, `${window.innerWidth * 0.02}px`)
+    }, 10)
 }
 
 function showAllPokemon(currentPokemon = bottomPlayer.pokemon) {
@@ -345,7 +376,6 @@ function changePokemon(index) {
 //loading is faling here
 function updateBanner(modifier, pokemon, attacker, topPlayerTurn, buttonId) {
 
-    let hpBanner = document.getElementById("health_value")
 
     if (pokemon.stats.hpLeft > pokemon.stats.hp) {
         pokemon.stats.hpLeft = pokemon.stats.hp
@@ -364,7 +394,6 @@ function updateBanner(modifier, pokemon, attacker, topPlayerTurn, buttonId) {
         getsearchBar = "#top_hp_animate"
     } else {
         getsearchBar = "#bottom_hp_animate"
-        hpBanner.textContent = `${pokemon.stats.hpLeft}/${pokemon.stats.hp}`
     }
 
     let healthBar = document.querySelector(getsearchBar)
@@ -380,10 +409,7 @@ function setMenuButttons(currentPokemon) {
         button.textContent = `${option} ${currentPokemon[option].currentUses}/${currentPokemon[option].maxUses}`
         button.style.height = `49%`
         button.style.width = `49%`
-        // console.log(option);
-        // console.log(currentPokemon);
 
-        // console.log(currentPokemon[option].power);
         button.id = option
         if (!currentPokemon[option].power) {
             button.classList.add(15)
@@ -433,7 +459,7 @@ function generateHealthBanner(pokemon = bottomPlayer.pokemon[0], bottomRightUser
     healthInfo.appendChild(healthBar)
 
     if (bottomRightUser) {
-        healthInfo.appendChild(healthValue(pokemon.stats))
+        // healthInfo.appendChild(healthValue(pokemon.stats))
         leftPokemonSprite.src = `https://img.pokemondb.net/sprites/black-white/anim/back-normal/${pokemon.name.toLowerCase()}.gif`
         health.id = "bottom_hp_animate"
     } else {
@@ -455,13 +481,13 @@ function generateHealthBanner(pokemon = bottomPlayer.pokemon[0], bottomRightUser
     return bannerFragment
 }
 
-function healthValue(hpUser) {
-    let hp = document.createElement("p")
-    hp.textContent = `${hpUser.hpLeft}/${hpUser.hp}`
-    hp.id = "health_value"
-    return hp
+// function healthValue(hpUser) {
+//     let hp = document.createElement("p")
+//     hp.textContent = `${hpUser.hpLeft}/${hpUser.hp}`
+//     hp.id = "health_value"
+//     return hp
 
-}
+// }
 
 
 
@@ -471,14 +497,13 @@ function resizeGameBoard() {
     let selectPok = document.querySelectorAll(".select")
     let player1 = document.querySelector("#player1")
     let player2 = document.querySelector("#player2")
-    let healthValue = document.querySelector("#health_value")
+    let buttonOptions = document.querySelectorAll("#buttonOptions button")
 
     
 
     if (player1) {
         player1.style.width = "100%"
         player2.style.width = "100%"
-        healthValue.style.fontSize = "90%"
 
     }
     if (selectPok) {
@@ -503,6 +528,7 @@ function resizeGameBoard() {
 
     resizeButtons(fontSizeAS, `${window.innerWidth * 0.025}px`)
     resizeButtons(fontSizeHB, `${window.innerWidth * 0.025}px`)
+    resizeButtons(buttonOptions, `${window.innerWidth * 0.02}px`)
 
     if (window.innerWidth > 1018 && window.innerHeight < 700) {
         return
@@ -510,6 +536,7 @@ function resizeGameBoard() {
         fightArea.style.width = `934px`
         fightArea.style.height = `500px`
         resizeButtons(fontSizeHB, `${window.innerWidth * 0.033}px`)
+        resizeButtons(buttonOptions, `${window.innerWidth * 0.025}px`)
         return
     }
 
