@@ -53,6 +53,14 @@ async function startGame() {
 
     let fragment = document.createDocumentFragment()
 
+    // Add Pokemon title
+    let pokemonTitle = document.createElement("h1")
+    pokemonTitle.textContent = "Pokemon"
+    pokemonTitle.style.color = "white"
+    pokemonTitle.style.fontSize = "48px"
+    pokemonTitle.style.margin = "20px 0"
+    pokemonTitle.style.textShadow = "2px 2px 0px black"
+
     let list = await new Pokemon().list()
 
     let playersView = document.createElement("div")
@@ -63,20 +71,16 @@ async function startGame() {
     playersView.appendChild(player1Selector)
     playersView.appendChild(player2Selector)
 
-
-
     gameStart.style.fontSize = `20px`
-
-    //TODO: need random toggle
     gameStart.classList.add("select")
-    gameStart.textContent = "Start Game"
+    gameStart.textContent = "Start Random"
 
+    fragment.appendChild(pokemonTitle)
     fragment.appendChild(playersView)
     fragment.appendChild(gameStart)
     popOverBanner.appendChild(fragment)
 
     popOverBanner.style.zIndex = 3
-
 }
 
 
@@ -102,7 +106,7 @@ function generateSelector(list = [], id) {
     let fragment = document.createDocumentFragment()
 
     let option = document.createElement("option")
-    option.textContent = "select Pokemon"
+    option.textContent = "select"
     fragment.appendChild(option)
     for (let i of list) {
         let option = document.createElement("option")
@@ -129,24 +133,46 @@ function generateSelector(list = [], id) {
 function loadPokemon(e) {
     if (e.target.value === "select Pokemon") return
     
+    let selectedPokemon = e.target.value
+    
     if (e.target.id === "player1") {
-
-        if (topPlayer.selector.length < 4 && !topPlayer.selector.includes(e.target.value)) {
-            topPlayer.selector.push(e.target.value)
+        if (topPlayer.selector.length < 4 && !topPlayer.selector.includes(selectedPokemon)) {
+            topPlayer.selector.push(selectedPokemon)
             console.log(topPlayer.selector)
             showListOfSelectedPokemon("playerselector1", topPlayer)
-
+            removePokemonFromSelectors(selectedPokemon)
         }
-
     } else {
-        if (bottomPlayer.selector.length < 4 && !bottomPlayer.selector.includes(e.target.value)) {
-            bottomPlayer.selector.push(e.target.value)
+        if (bottomPlayer.selector.length < 4 && !bottomPlayer.selector.includes(selectedPokemon)) {
+            bottomPlayer.selector.push(selectedPokemon)
             showListOfSelectedPokemon("playerselector2", bottomPlayer)
-
+            removePokemonFromSelectors(selectedPokemon)
         }
     }
+}
 
-
+function removePokemonFromSelectors(pokemonName) {
+    let player1Selector = document.querySelector("#player1")
+    let player2Selector = document.querySelector("#player2")
+    
+    // Remove from both selectors
+    for (let option of player1Selector.options) {
+        if (option.textContent === pokemonName) {
+            option.remove()
+            break
+        }
+    }
+    
+    for (let option of player2Selector.options) {
+        if (option.textContent === pokemonName) {
+            option.remove()
+            break
+        }
+    }
+    
+    // Reset both selectors to "select Pokemon"
+    player1Selector.selectedIndex = 0
+    player2Selector.selectedIndex = 0
 }
 
 function showListOfSelectedPokemon(where, player) {
@@ -157,6 +183,22 @@ function showListOfSelectedPokemon(where, player) {
         pokemonName.textContent = i
         pokemonName.classList.add("pokemonName")
         list.appendChild(pokemonName)
+    }
+    
+    // Disable selector if player has 4 Pokemon
+    if (where === "playerselector1") {
+        let player1Selector = document.querySelector("#player1")
+        player1Selector.disabled = topPlayer.selector.length >= 4
+    } else if (where === "playerselector2") {
+        let player2Selector = document.querySelector("#player2")
+        player2Selector.disabled = bottomPlayer.selector.length >= 4
+    }
+    
+    // Update button text based on Pokemon selection
+    if (topPlayer.selector.length > 0 || bottomPlayer.selector.length > 0) {
+        gameStart.textContent = "Game Start"
+    } else {
+        gameStart.textContent = "Start Random"
     }
 }
 
@@ -228,7 +270,7 @@ gameStart.addEventListener("click", (e) => {
                 resizeGameBoard()
             }, 50)
         })
-    } else if (topPlayer.selector.length < 4 && topPlayer.selector.length === bottomPlayer.selector.length) {
+    } else if (topPlayer.selector.length === bottomPlayer.selector.length && topPlayer.selector.length > 0) {
         updatePokemon(e.target.className).then(() => {
             popOverBanner.style.zIndex = -3
             // Force layout recalculation after game starts
@@ -237,13 +279,7 @@ gameStart.addEventListener("click", (e) => {
             }, 50)
         })
     } else {
-        let length
-        if (topPlayer.selector.length > bottomPlayer.selector.length) {
-            length = topPlayer.selector.length
-        } else {
-            length = bottomPlayer.selector.length
-        }
-        alert(`Each player needs ${length} pokemon and no more than 4`)
+        alert(`Players need to have the same number of Pokemon`)
     }
 })
 
