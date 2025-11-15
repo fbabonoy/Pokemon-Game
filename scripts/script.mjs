@@ -254,8 +254,10 @@ fightButton.addEventListener("click", (e) => {
 })
 
 restartBtn.addEventListener("click", () => {
+    // Show selectorView when restarting
+    let selectorView = document.querySelector(".selectorView")
+    if (selectorView) selectorView.style.display = "flex"
     startGame()
-
 })
 
 gameStart.addEventListener("click", (e) => {
@@ -265,6 +267,9 @@ gameStart.addEventListener("click", (e) => {
     if (topPlayer.selector.length === 0 && bottomPlayer.selector.length === 0) {
         updatePokemon("random").then(() => {
             popOverBanner.style.zIndex = -3
+            // Hide selectorView when game starts
+            let selectorView = document.querySelector(".selectorView")
+            if (selectorView) selectorView.style.display = "none"
             // Force layout recalculation after game starts
             setTimeout(() => {
                 resizeGameBoard()
@@ -273,6 +278,9 @@ gameStart.addEventListener("click", (e) => {
     } else if (topPlayer.selector.length === bottomPlayer.selector.length && topPlayer.selector.length > 0) {
         updatePokemon(e.target.className).then(() => {
             popOverBanner.style.zIndex = -3
+            // Hide selectorView when game starts
+            let selectorView = document.querySelector(".selectorView")
+            if (selectorView) selectorView.style.display = "none"
             // Force layout recalculation after game starts
             setTimeout(() => {
                 resizeGameBoard()
